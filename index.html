@@ -1,0 +1,99 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+	<body>
+		<div style="position: absolute; top: 800px; width: 100%;">
+			<textarea id="clientContent" cols="50" rows="10"></textarea>
+			<button onclick="sendMessage()">Send</button>
+			<textarea id="serverContent" style="margin-left: 10%;" cols="50" rows="10"></textarea>
+		</div>
+		<div class="loading"></div>
+		<script type="text/javascript">
+			"use strict";
+
+			var clientContent = document.getElementById( 'clientContent' );
+			var serverContent = document.getElementById( 'serverContent' );
+
+			var urlParams = new URLSearchParams( window.location.search );
+			var id = urlParams.get( 'id' );
+
+			var HOST = location.origin.replace( /^http/, 'ws' );
+
+			// connecting to the web server
+			var socket = new WebSocket( HOST + "/" + id, 'echo-protocol' );
+			//var socket = new WebSocket( 'ws://localhost:4000/' + id, 'echo-protocol' ); 
+
+			// listening for server response
+			socket.onmessage = function ( message ) { 
+
+				var obj = JSON.parse( message.data );
+
+				if( "message" in obj ) {
+					serverContent.innerHTML += obj.message + '\n';
+				};
+
+				if( "state" in obj ) {
+
+					switch( obj.state ) {
+				
+						case "start":
+
+							document.getElementsByClassName( "loading" )[0].classList.remove( "loading" );
+							game.init( obj.team, obj.lobby );
+							break;
+
+						case "update":
+							game.updateOpponent( obj );
+							break;
+
+						default:
+					
+					};
+				
+				};
+
+			};
+
+			// listening for any socket error
+			socket.onerror = function ( error ) { 
+				console.log( 'WebSocket error: ' + error );
+			};
+
+			function sendMessage() {
+				if( clientContent && clientContent.value ){
+					// sending message to server
+					socket.send( clientContent.value ); 
+				};
+					
+				clientContent.value = '';
+			};
+
+		</script>
+
+		<canvas id="canvas"></canvas>
+		<button onclick="pause()">Stop RAF</button>
+		<button id="home">Go Home</button>
+		<button id="random">Random</button>
+		<button id="formation">Formation</button>
+
+	</body>
+
+	<script type="text/javascript" src="js/Pitch.js"></script>
+	<script type="text/javascript" src="js/Vec2.js"></script>
+	<script type="text/javascript" src="js/Boid.js"></script>
+	<script type="text/javascript" src="js/State.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script>
+		let deltaTime;
+		let RAF;
+		function pause(){
+			cancelAnimationFrame( RAF );
+		};
+
+		const game = new Game();
+
+	</script>
+
+<html>
+

@@ -1,0 +1,72 @@
+body, html {
+	margin: 0px;
+	padding: 0px;
+	background-color: #343435;
+	color: #fff;
+}
+
+#canvas {
+	position: absolute; 
+	top:60px;
+	left:365px;
+}
+
+.container {
+	position:absolute;
+	top:20px;
+	z-index:1;
+}
+
+.status {
+	position:relative;
+	z-index:1;
+}
+
+.loading {
+	animation: clockwise 1.5s linear infinite;
+	display: block;
+	height: 2em;
+	position: relative;
+	width: 2em;
+}
+
+.loading,
+.loading:before,
+.loading:after {
+	border: .2em solid transparent;
+	border-radius: 50%;
+	border-top-color: rgba(25,255,255,0.6);
+	margin: auto;
+}
+
+.loading:before,
+.loading:after {
+	content: '';
+	position: absolute;
+}
+
+.loading:before {
+	animation: anticlockwise .9s linear infinite;
+	top: -.6em;
+	right: -.6em;
+	bottom: -.6em;
+	left: -.6em;
+}
+
+.loading:after {
+	animation: anticlockwise .66s linear infinite;
+	top: .3em;
+	right: .3em;
+	bottom: .3em;
+	left: .3em;
+}
+
+@keyframes clockwise {
+	0%  { transform: rotate(0deg) }
+	100%{ transform: rotate(360deg) }
+}
+
+@keyframes anticlockwise {
+	0%  { transform: rotate(360deg) }
+	100%{ transform: rotate(0deg) }
+}
