@@ -86,11 +86,14 @@ wss.on( 'connection', function ( ws, req ){
 
 		};
 
-		webSockets[ target ].send( JSON.stringify( { 
-			player: obj.player,
-			state: obj.state
-		}));
+		if( webSockets[ target ] != undefined ){
 
+			webSockets[ target ].send( JSON.stringify( { 
+				player: obj.player,
+				state: obj.state
+			}));
+
+		};
 
 	});
 
